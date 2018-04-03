@@ -1332,6 +1332,15 @@ def init_nuts(init='auto', chains=1, n_init=500000, model=None,
             progressbar=progressbar,
             obj_optimizer=pm.adagrad_window,
         )  # type: pm.MeanField
+        # see: https://discourse.pymc.io/t/frequently-asked-questions/74/5
+        mu_approx = approx.approx.params[0]
+        rho_approx = approx.approx.params[1]
+
+        if numpy.isnan(mu_approx.eval()).any():
+            mu_approx.set_value(np.zeros(mu_approx.eval().shape))
+        if numpy.isnan(rho_approx.eval()).any():
+            rho_approx.set_value(np.zeros(rho_approx.eval().shape))
+
         start = approx.sample(draws=chains)
         start = list(start)
         stds = approx.bij.rmap(approx.std.eval())
