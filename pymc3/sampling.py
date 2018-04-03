@@ -1336,8 +1336,9 @@ def init_nuts(init='auto', chains=1, n_init=500000, model=None,
         mu_approx = approx.approx.params[0]
         rho_approx = approx.approx.params[1]
 
-        print(mu_approx.eval())
-        print(rho_approx.eval())
+        _log.info('Starting values:')
+        _log.info(mu_approx.eval())
+        _log.info(rho_approx.eval())
 
         if numpy.isnan(mu_approx.eval()).any():
             mu_approx.set_value(np.zeros(mu_approx.eval().shape))
